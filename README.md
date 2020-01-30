@@ -20,4 +20,5 @@ Jaxon Stout <jstout@carthage.edu><br>
 Sophia Tajnai <stajnai@carthage.edu><br>
 <br>
 ![screenshot]
+
 [screenshot]: https://raw.githubusercontent.com/Mindstormer-0/Apollo-Music-Player/master/FrontEnd/images/screenshot_1-30-20.PNG
