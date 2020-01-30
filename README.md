@@ -1,6 +1,6 @@
 # Apollo Music Player
 
-Forked from 'Carthage-Agile's Apollo-Music-Player' this branch is a personal project.
+Forked from 'Carthage-Agile's Apollo-Music-Player' this repository is a personal project.
 
 # Active Contributors:
 Caleb Collar <ccollar@carthage.edu><br>
