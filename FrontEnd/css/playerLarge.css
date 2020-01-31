@@ -78,6 +78,16 @@ body{
 }
 
 .square{
+  opacity: 0.8;
+  max-width: 30%;
+  margin: 1%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  border: none;
+}
+
+.square:hover{
+  opacity: 1;
   max-width: 30%;
   margin: 1%;
   padding-top: 1%;
@@ -89,6 +99,14 @@ body{
   color: inherit;
   width: 100%;
   text-align: left;
+}
+
+.libraryRow {
+  opacity: 0.65;
+}
+
+.libraryRow:hover {
+  opacity: 1;
 }
 
 
@@ -171,9 +189,8 @@ td{
 }
 
 .playerAlbumArt{
-  padding-top: 5%;
-  padding-left: 10%;
-  padding-right: auto;
+  box-shadow: 15px 15px 10px rgba(26, 26, 26, 0.76);
+  margin-left: 10%;
   max-width: 90%;
 }
 

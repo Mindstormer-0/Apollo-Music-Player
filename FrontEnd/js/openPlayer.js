@@ -61,28 +61,11 @@ function closeCurrent() {
 function shuffle() {
   var x = document.getElementById("shuffle");
   if (x.style.color === "white") {
-      x.style.color = "#f7931E";
-       /* shuffle on*/
-      var j = fetch('http://localhost:5000/api/shuffle', { method: 'POST', mode: 'cors' });
-      j.then(function (response) { //fask should have printed 
-          return response.text();
-      }).then(function (text) {
-          currentlyPlaying();
-          //console.log('POST response: ');
-          //console.log(text);
-      });
+    x.style.color = "#f7931E";
      /* shuffle on*/
   } else {
     x.style.color = "white";
-  /* shuffle off*/
-      var j = fetch('http://localhost:5000/api/unshuffle', { method: 'POST', mode: 'cors' });
-      j.then(function (response) { //fask should have printed 
-          return response.text();
-      }).then(function (text) {
-          currentlyPlaying();
-          //console.log('POST response: ');
-          //console.log(text);
-      });
+     /* shuffle off*/
   }
 }
 
@@ -166,19 +149,9 @@ function generateLibrary() {
   var songList = document.getElementById("libraryBody");
   for (var i = 0; i < library.length; i++) {
     var song = document.createElement("tr");
-    /*
-    var id= library[i].id;
-    id = parse.JSON(id);
-    song.setAttribute ('onclick' , function idSendPlay() {
-      fetch('http://localhost:5000/api/play_selected', {method: 'POST', mode: "cors", body: id, headers:{"Content-Type": 'application/json'}
-      })
-      .then(function(response){
-         return response.text();
-      })
-      .then(function(text){
-      });
-    });
-    */
+    song.setAttribute("id", library[i].id);
+    song.setAttribute("class", "libraryRow");
+    addRowHandlers();
       var cell = document.createElement("td");
       var songName = document.createTextNode(library[i].title);
       cell.appendChild(songName);
@@ -206,6 +179,33 @@ function generateLibrary() {
 
     songList.appendChild(song);
   }
+}
+
+function addRowHandlers() {
+  var table = document.getElementById("libraryTable");
+  var rows = table.getElementsByTagName("tr");
+  for (i = 0; i < rows.length; i++) {
+      var currentRow = table.rows[i];
+      var createClickHandler = function(row) 
+          {
+              return function() { 
+                  var id = row.id;
+                  idSendPlay(id)
+                               };
+          };
+      currentRow.onclick = createClickHandler(currentRow);
+  }
+}
+
+function idSendPlay(val) {var asJSON = JSON.stringify({'id':val});fetch('http://localhost:5000/api/play_selected', {
+  method: 'POST',
+  mode: "cors",
+  body: asJSON,
+  headers:{"Content-Type": 'application/json'}
+  }).then(function(response){
+    return response.text();
+  }).then(function(text){
+  });
 }
 
 function addAlbums() { 
@@ -364,6 +364,17 @@ function SetVolume(val)
   });
 }
 
+function shuffle()
+{
+    var j = fetch('http://localhost:5000/api/shuffle', { method: 'POST', mode: 'cors' });
+    j.then(function (response) { //fask should have printed 
+        return response.text();
+    }).then(function (text) {
+        currentlyPlaying();
+        //console.log('POST response: ');
+        //console.log(text);
+    });
+}
 
 function currentlyPlaying() {
   fetch('http://localhost:5000/api/get_current', {method: 'GET', mode: 'cors'})
@@ -376,7 +387,10 @@ function currentlyPlaying() {
     var r = obj.palette[0][0];
     var g = obj.palette[0][1];
     var b = obj.palette[0][2];
-    document.getElementById('currentlyPlaying').style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+    var r2 = obj.palette[1][0];
+    var g2 = obj.palette[1][1];
+    var b2 = obj.palette[1][2];
+    document.getElementById('currentlyPlaying').style.backgroundImage = 'linear-gradient(to bottom, rgba('+r+','+g+','+b+','+1+'), rgba('+r2+','+g2+','+b2+','+0+'))';
     if (obj.pic == '' || obj.pic == null || obj.pic == 'none') {
       document.getElementById('currentAlbum').setAttribute('src', "./images/AlbumArt-01.png");
     }
