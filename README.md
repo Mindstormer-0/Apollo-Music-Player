@@ -19,6 +19,11 @@ Sam Santiago <ssantiago1@carthage.edu><br>
 Jaxon Stout <jstout@carthage.edu><br>
 Sophia Tajnai <stajnai@carthage.edu><br>
 <br>
-![screenshot]
+![screenshot1]
+<br>
+![screenshot2]
+<br>
 
-[screenshot]: https://raw.githubusercontent.com/Mindstormer-0/Apollo-Music-Player/master/FrontEnd/images/screenshot_1-30-20.PNG
+[screenshot1]: https://raw.githubusercontent.com/Mindstormer-0/Apollo-Music-Player/master/FrontEnd/images/screenshot_1-30-20.PNG
+
+[screenshot2]: https://raw.githubusercontent.com/Mindstormer-0/Apollo-Music-Player/master/FrontEnd/images/screenshot2_1-30-20.PNG
