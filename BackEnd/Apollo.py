@@ -343,5 +343,79 @@ def repeat_off():
 	client.single(0)
 	return 'Ok',200
 
+def test_json_return():
+	#this code seems to work but isn't written super well. testing on other systems would help
+	all_info = client.listallinfo()
+	artists = client.list('artist')
+	artists[0] = 'none' if artists[0] == '' else artist[0]
+	albums = client.list('album')
+	albums[0] = 'none' if albums[0] == '' else albums[0]
+	list_for_ids = client.playlistinfo()
+
+	SONGS = []
+	ALBUMS = []
+	albums_artists = []
+	list_for_ids = client.playlistinfo()
+	for x in list_for_ids:  		 
+		SONGS.append(songBuilder(x,['title','duration','id','album','artist']))	
+		x['artist'] = 'none' if 'artist' not in x else x['artist']
+		x['album'] = 'none' if 'album' not in x else x['album']
+		x['title'] == x['file'] if 'title' not in x else x['title']
+		try:
+			art = AlbumArtGenerator(x['album'],x['artist'])
+			test = {'albumname':x['album'],'artist':x['artist'],'albumart' : art}
+			test2 = albums_artists.index(test)			  #if I switch the order of these lines, i could maybe do the check before the art
+		except ValueError:
+			albums_artists.append(test)
+
+	#THIS LOOP IS GARGAGE
+	for xyz in albums:
+		counter = 0
+		artist_seen = []
+		for x in list_for_ids:
+			temporary_artist = x['artist']
+
+			if x['album'] == xyz and x['artist'] not in artist_seen:
+				counter += 1
+				artist_seen.append(x['artist'])
+		for x in list_for_ids:
+			if x['album'] == xyz:
+				break
+
+		temporary = x['artist'] if counter == 1 else 'various artists'
+		ALBUMS.append({'albumname':x['album'],'artist':temporary,'albumart' :AlbumArtGenerator(x['album'],temporary)})
+
+
+	ARTISTS = []
+	for artist_index, artist in enumerate(artists):
+		first_time = True
+	
+		for album in ALBUMS:	
+			if album['artist'] == 'various artists':
+				try:
+					albums_artists.index({'albumart' : AlbumArtGenerator(album['albumname'],artist), 'albumname' : album['albumname'], 'artist' :artist})
+				except:
+					continue
+			elif album['artist'] != artist :
+				continue
+			if not first_time:
+				for checker in ARTISTS[artist_index][artist]['albums']:
+					if checker['albumname'] == album['albumname']:
+						continue
+			temp_song_list = []			
+			for song in SONGS:
+				if song['album'] != album['albumname']:
+					continue
+				temp_song_list.append(song)
+
+			album['songs'] = temp_song_list
+			if first_time:  
+				first_time = False
+				ARTISTS.append({artist:{'albums':[album]}})
+			else:
+				ARTISTS[artist_index][artist]['albums'].append(album) 
+
+	return json.dumps((ARTISTS,ALBUMS,SONGS))
+
 
 startup_func()
