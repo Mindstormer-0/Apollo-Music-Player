@@ -31,8 +31,9 @@ app = Flask(__name__) #Flask
 CORS(app, resources=r'/api/*', allow_headers= ['Content-Type', 'Access-Control-Allow-Origin']) #Cross Origin for JSON
 #logging.getLogger('flask_cors').level = logging.DEBUG #Debug with CORS
 client = musicpd.MPDClient() #mpd client
-desired_volume = 50 #volume at start = 50
+desired_volume = 20 #volume at start = 50
 info = []
+#startup_func()
 
 # functions
 def startup_func():
@@ -417,5 +418,9 @@ def test_json_return():
 
 	return json.dumps((ARTISTS,ALBUMS,SONGS))
 
+@app.route('/api/heartbeat', methods = ['GET'])
+def heartbeat():
+	status = client.status()
+	return json.dumps({'state': client.status()['state']})
 
 startup_func()

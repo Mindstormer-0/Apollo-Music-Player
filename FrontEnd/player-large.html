@@ -48,8 +48,8 @@
 			</i>
 		</div>
 		<div class="w3-container">
-			<div class="w3-light-grey w3-round"">
-			  <div id="progBar" class="w3-green w3-round" style="height:7px;width:0%"></div>
+			<div id="progBarBG" class="w3-light-grey">
+			  <div id="progBar" class="progress-bar progress-bar-striped bg-dark" style="height:7px;width:0%"></div>
 			</div>
 		<div class="durations">
 			<i class="elapsed" href="#" style="font-family: Azonix" id="returnCurrentElapsed"></i>
@@ -66,8 +66,8 @@
 			<i style="color: white;" onclick="repeat()" ondblclick="repeatSong()"  class="Repeat fas fa-redo-alt" id="rewind"  id="rewind"></i>
 			<i onclick="repeatoff()" id="rewindSong" class="fas fa-history" ></i>
 		</div>
-		<div class="volumeBar">
-			<input id="vol-control" class="volume" type="range" min="0" max="100" step="1" oninput="SetVolume(this.value)" onchange="SetVolume(this.value)">	
+		<div class="slidecontainer">
+			<input type="range" min="0" max="100" step="1" value="25" class="slider" id="myRange" oninput="SetVolume(this.value*0.25)" onchange="SetVolume(this.value*0.25)">	
 			</input>
 		</div>
 	</div>

@@ -32,6 +32,7 @@ body{
   width: 98%;
   position: relative;
   padding-left: 5%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .mainPages{
@@ -53,10 +54,12 @@ body{
   height: 20%;
   background-color:rgba(107, 107, 107, 0.171);
   overflow: hidden;
+  cursor: pointer; /* Cursor on hover */
 }
 
 #search , .searchText{
   width: 90%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 #currentCue{
@@ -84,6 +87,7 @@ body{
   padding-top: 1%;
   padding-bottom: 1%;
   border: none;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .square:hover{
@@ -195,13 +199,22 @@ td{
 }
 
 .currentArtist{
-  opacity: 0.5;
   padding-left: 10%;
   padding-top: 1%;
   font-size: 12px;
   font-family: "Azonix";
   font-weight: 200;
   padding-bottom: 5%;
+  cursor: pointer; /* Cursor on hover */
+}
+
+#returnCurrentArtist {
+  opacity: 0.5;
+}
+
+#returnCurrentArtist:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
 
 .currentSong{
@@ -229,68 +242,62 @@ td{
   opacity: 0.6;
   padding-left: 10%;
   padding-top: .5%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .backButton:hover {
   opacity: 1;
   padding-left: 10%;
   padding-top: .5%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .playButton{
   opacity: 0.6;
   margin-left: 25%;
   margin-right: 25%;
-
+  cursor: pointer; /* Cursor on hover */
 }
 
 .playButton:hover{
   opacity: 1;
   margin-left: 25%;
   margin-right: 25%;
-
+  cursor: pointer; /* Cursor on hover */
 }
 
 .ffButton{
   opacity: 0.6;
   padding-right: 10%;
   padding-top: .5%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .ffButton:hover{
   opacity: 1;
   padding-right: 10%;
   padding-top: .5%;
-}
-
-.volume{
-  opacity: 0.95;
-  padding-left: 10%;
-  width: 90%;
-  max-width: 100%;
-}
-
-.volume:hover{
-  opacity: 1;
-  padding-left: 10%;
-  width: 90%;
-  max-width: 100%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .Shuffle{
   opacity: 0.6;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .Shuffle:hover{
   opacity: 1;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .Repeat{
   opacity: 0.6;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .Repeat:hover{
   opacity: 1;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .albumArt{
@@ -298,6 +305,7 @@ td{
   max-width: 30%;
   float: left;
   padding-top: 0%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .albumArt:hover{
@@ -305,6 +313,7 @@ td{
   max-width: 30%;
   float: left;
   padding-top: 0%;
+  cursor: pointer; /* Cursor on hover */
 }
 
 .exit{
@@ -404,3 +413,52 @@ td{
   color: #f7931E;
 }
 
+#progBarBG {
+  cursor: pointer; /* Cursor on hover */
+}
+#progBar {
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slidecontainer {
+  width: 65%; /* Width of the outside container */
+  padding-top: 20px;
+  margin: auto;
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 5px; /* Specified height */
+  background: #1a1a1a; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.8; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 7px; /* Set a specific slider handle width */
+  height: 7px; /* Slider handle height */
+  background: #ffffff; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 7px; /* Set a specific slider handle width */
+  height: 7px; /* Slider handle height */
+  background: #ffffff; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}

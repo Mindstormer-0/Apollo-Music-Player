@@ -1,15 +1,59 @@
-var objList;
+/* Notes:
+Boot gets built-list and then calls boot2.
+Uses Bootstrap4.
+  Bootstrap colors:
+  bg-primary(blue)
+  bg-secondary(grey)
+  bg-success(green)
+  bg-danger(red)
+  bg-warning(orange)
+  bg-info(turquoise)
+  bg-light(off-white)
+  bg-dark(dark-grey)
+  bg-white(white)
+*/
+
+var objList = {"artist": "none", "album": "none", "title": "none", "duration": "none", "elapsed": "none", "pic": "none", "palette": [[35, 47, 53], [191, 170, 157], [128, 151, 162]]}
+var liveDuration = {"duration": 0, "elapsed": 0};
+var mpdStatus = {"state": "pause"};
+var checkSystemStatus = false;
 
 function boot(){
+  nullInfo();
   fetchAllSongs();
 }
 
 function boot2(){
+  heartbeat();
+  checkPlayUIStatus();
   currentlyPlaying();
+  setInterval(function() {heartbeat()}, 500);
+  setInterval(function() {progressTime()}, 99);
+  setInterval(function() {progressBar(liveDuration)}, 100);
   addAlbums();
   addPlaylists();
   addArtists();
   generateLibrary();
+}
+
+function nullInfo() {
+  document.getElementById('currentAlbum').setAttribute('src', "./images/AlbumArt-01.png");
+  document.getElementById('returnCurrentSong').innerHTML = 'none';
+  document.getElementById('returnCurrentArtist').innerHTML = 'none';
+  document.getElementById('returnCurrentDuration').innerHTML = '0:00';
+  document.getElementById('returnCurrentElapsed').innerHTML = '0:00';
+}
+
+function heartbeat() {
+  fetch('http://localhost:5000/api/heartbeat', {method: 'GET', mode: 'cors'})
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function (obj) {
+    mpdStatus = obj;
+    //console.log(mpdStatus.state);
+    delete obj;
+  });
 }
 
 function openSearch() {
@@ -191,6 +235,7 @@ function addRowHandlers() {
               return function() { 
                   var id = row.id;
                   idSendPlay(id)
+                  setTimeout(function() {currentlyPlaying()}, 100);
                                };
           };
       currentRow.onclick = createClickHandler(currentRow);
@@ -339,9 +384,9 @@ function prevSong()
 
 function SetVolume(val) 
 {
-  var player = document.getElementById('vol-control');
+  var player = document.getElementById('myRange');
   //console.log('Before: ' + player.volume);
-  player.volume = val / 100;
+  player.volume = val;
   //console.log('After: ' + player.volume);
 
   var asJSON = JSON.stringify({'volume':val});
@@ -384,6 +429,7 @@ function currentlyPlaying() {
     .then(function (obj) {
     //console.log(obj);
     //console.log(obj.palette[0]);
+    //console.log(mpdStatus.state);
     var r = obj.palette[0][0];
     var g = obj.palette[0][1];
     var b = obj.palette[0][2];
@@ -400,24 +446,68 @@ function currentlyPlaying() {
     document.getElementById('returnCurrentSong').innerHTML = obj.title;
     document.getElementById('returnCurrentArtist').innerHTML = obj.artist;
     document.getElementById('returnCurrentDuration').innerHTML = secondsTo_MMSS(obj.duration);
-    document.getElementById('returnCurrentElapsed').innerHTML = secondsTo_MMSS(obj.elapsed);
-    setInterval(currentlyPlaying(), 1000);
-    setInterval(progressBar(obj), 500);
-    delete obj
+    liveDuration.duration = obj.duration;
+    liveDuration.elapsed = obj.elapsed;
+    checkPlayUIStatus();
+    var callself = parseInt(obj.duration);
+    callself = (callself * 1000) - 100;
+    if (parseInt(obj.elapsed) >= parseInt(obj.duration)){
+      currentlyPlaying();
+    }
+    setTimeout(function() {currentlyPlaying()}, callself);
+    delete obj;
   });
+}
+
+function checkPlayUIStatus() {
+  if (mpdStatus.state == 'play') {
+    document.getElementById("pause").style.display = "inline";
+    document.getElementById("play").style.display = "none";
+  }
+  else {
+  document.getElementById("pause").style.display = "none";
+  document.getElementById("play").style.display = "inline";
+  }
+  document.getElementById('returnCurrentElapsed').innerHTML = secondsTo_MMSS(liveDuration.elapsed);
+}
+
+function progressTime() {
+  checkSystemStatus = false;
+  if (mpdStatus.state == 'play') {
+    const tick = 0.100;
+    var elapsed = parseFloat(liveDuration.elapsed);
+    liveDuration.elapsed = elapsed + tick;
+    document.getElementById('returnCurrentElapsed').innerHTML = secondsTo_MMSS(liveDuration.elapsed);
+  }
+  if (liveDuration.elapsed >= liveDuration.duration) {
+    //checkSystemStatus = true;
+  }
+  return 0;
 }
 
 function progressBar(obj) {
   var bar = document.getElementById("progBar");
-    barPercent = (obj.elapsed / obj.duration) * 100;
-    bar.style.width = String(barPercent) + '%';
+  barPercent = (obj.elapsed / obj.duration) * 100;
+  bar.style.width = String(barPercent) + '%';
+  if (mpdStatus.state == 'play'){
+    document.getElementById('progBar').setAttribute('class', "progress-bar progress-bar-striped progress-bar-animated bg-dark");
+  }
+  else {
+    document.getElementById('progBar').setAttribute('class', "progress-bar progress-bar-striped bg-dark");
+  }
+  return 0;
 }
 
 function secondsTo_MMSS(seconds) {
-  durMin = seconds / 60;
-  durSec = seconds % 60;
-  durMin = durMin.toFixed(0);
-  durSec = durSec.toFixed(0);
+  function toFixed(num, fixed) {
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+    return num.toString().match(re)[0];
+  } 
+  var fSec = parseInt(seconds);
+  var durMin = fSec / 60;
+  var durSec = fSec % 60;
+  durMin = toFixed(durMin, 0);
+  durSec = toFixed(durSec, 0);
   function pad(value) {
     if(value < 10) {
         return '0' + value;
@@ -425,9 +515,28 @@ function secondsTo_MMSS(seconds) {
         return value;
     }
   }
-  durMin = pad(durMin);
+  //durMin = pad(durMin);
   durSec = pad(durSec);
-  durMinStr = String(durMin);
-  durSecStr = String(durSec);
-  return durMinStr + ':' + durSecStr;
+  return durMin + ':' + durSec;
 }
+
+/* This is for the future seek scrubber
+function returnMouseEventRelPos() {
+  // e = Mouse click event.
+  var rect = document.getElementById("progBar").getBoundingClientRect();
+  var x = document.getElementById("progBar").clientX - rect.left; //x position within the element.
+  var y = document.getElementById("progBar").clientY - rect.top;  //y position within the element.
+  return x;
+}
+
+
+function seekTo(time) {
+  fetch('http://localhost:5000/api/seek', {method: 'POST', mode: "cors", body: time, headers:{"Content-Type": 'application/json'}
+  }).then(function(response){
+    return response.text();
+  }).then(function(text){
+    //console.log('POST reponse: ');
+    //console.log(text);
+  });
+}
+*/
